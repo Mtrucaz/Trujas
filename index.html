@@ -10,6 +10,8 @@
             font-family: Arial, sans-serif;
             padding: 20px;
             text-align: center;
+            position: relative; /* Para posicionar elementos absolutamente */
+            overflow: hidden; /* Para ocultar el desbordamiento */
         }
         .comment-box {
             background: white;
@@ -31,6 +33,27 @@
         .star.selected {
             color: gold; /* Color dorado para estrellas seleccionadas */
         }
+        /* Estilos para el menú desplegable */
+        .dropdown {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .dropdown select {
+            margin-bottom: 10px;
+        }
+        /* Estilos para la fecha y hora */
+        .datetime {
+            position: absolute;
+            bottom: 10px;
+            right: 20px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -50,6 +73,18 @@
 
     <h2>Comentarios</h2>
     <div id="comments-section"></div>
+
+    <div class="dropdown">
+        <label for="options">Selecciona una opción:</label>
+        <select id="options">
+            <option value="">--Selecciona--</option>
+            <option value="https://www.google.com">Google</option>
+            <option value="https://www.wikiloc.com">Wikiloc</option>
+        </select>
+        <button onclick="openLink()">Ir</button>
+    </div>
+
+    <div class="datetime" id="datetime"></div>
 
     <script>
         const stars = document.querySelectorAll('.star');
@@ -80,6 +115,43 @@
                 alert('Por favor, selecciona una valoración y escribe un comentario.');
             }
         }
+
+        function openLink() {
+            const select = document.getElementById('options');
+            const url = select.value;
+            if (url) {
+                window.open(url, '_blank');
+            }
+        }
+
+        // Función para mostrar la fecha y hora
+        function updateDateTime() {
+            const now = new Date();
+            const datetimeElement = document.getElementById('datetime');
+            datetimeElement.innerHTML = now.toLocaleString(); // Muestra la fecha y hora en formato local
+        }
+
+        // Cambiar fondo de forma aleatoria con imágenes de paisajes
+        const backgrounds = [
+            'url("https://source.unsplash.com/random/800x600/?landscape,forest")',
+            'url("https://source.unsplash.com/random/800x600/?landscape,mountain")',
+            'url("https://source.unsplash.com/random/800x600/?landscape,sea")',
+            'url("https://source.unsplash.com/random/800x600/?landscape,sunset")',
+            'url("https://source.unsplash.com/random/800x600/?landscape,park")'
+        ];
+
+        let currentIndex = 0;
+
+        function changeBackground() {
+            document.body.style.backgroundImage = backgrounds[currentIndex];
+            currentIndex = (currentIndex + 1) % backgrounds.length;
+        }
+
+        // Actualizar la fecha y hora cada segundo
+        setInterval(updateDateTime, 1000);
+        // Cambiar el fondo cada 10 segundos
+        setInterval(changeBackground, 10000);
+        changeBackground(); // Llama a la función al cargar la página
     </script>
 </body>
 </html>
