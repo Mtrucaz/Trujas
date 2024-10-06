@@ -54,6 +54,16 @@
             right: 20px;
             font-size: 14px;
         }
+        /* Estilos para los fuegos artificiales */
+        #fireworks {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Para no interferir con otros elementos */
+            display: none; /* Oculto por defecto */
+        }
     </style>
 </head>
 <body>
@@ -86,6 +96,9 @@
 
     <div class="datetime" id="datetime"></div>
 
+    <!-- Canvas para los fuegos artificiales -->
+    <canvas id="fireworks"></canvas>
+
     <script>
         const stars = document.querySelectorAll('.star');
         let rating = 0;
@@ -95,6 +108,13 @@
                 rating = star.dataset.value;
                 stars.forEach(s => s.classList.remove('selected'));
                 star.classList.add('selected');
+                for (let i = 0; i < rating; i++) {
+                    stars[i].classList.add('selected');
+                }
+
+                if (rating === '5') {
+                    showFireworks(); // Mostrar fuegos artificiales si se seleccionan 5 estrellas
+                }
             });
         });
 
@@ -146,6 +166,55 @@
         function changeBackground() {
             document.body.style.backgroundImage = backgrounds[currentIndex];
             currentIndex = (currentIndex + 1) % backgrounds.length;
+        }
+
+        // Función para mostrar fuegos artificiales
+        function showFireworks() {
+            const fireworksCanvas = document.getElementById('fireworks');
+            const ctx = fireworksCanvas.getContext('2d');
+            fireworksCanvas.width = window.innerWidth;
+            fireworksCanvas.height = window.innerHeight;
+            fireworksCanvas.style.display = 'block'; // Mostrar el canvas
+            
+            const particles = [];
+            const colors = ['red', 'green', 'blue', 'yellow', 'orange', 'purple', 'pink'];
+
+            for (let i = 0; i < 100; i++) {
+                particles.push({
+                    x: Math.random() * fireworksCanvas.width,
+                    y: Math.random() * fireworksCanvas.height,
+                    radius: Math.random() * 5 + 2,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    alpha: Math.random() * 1,
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+                particles.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2, false);
+                    ctx.fillStyle = p.color;
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fill();
+                });
+            }
+
+            function animate() {
+                draw();
+                particles.forEach(p => {
+                    p.y -= 1;
+                    p.alpha -= 0.01; // Hacer que los fuegos artificiales se desvanezcan
+                });
+                particles.filter(p => p.alpha > 0); // Eliminar partículas que se han desvanecido
+                if (particles.length > 0) {
+                    requestAnimationFrame(animate);
+                } else {
+                    fireworksCanvas.style.display = 'none'; // Ocultar el canvas cuando ya no haya partículas
+                }
+            }
+
+            animate(); // Iniciar la animación
         }
 
         // Actualizar la fecha y hora cada segundo
