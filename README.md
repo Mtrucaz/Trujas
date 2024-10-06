@@ -6,11 +6,11 @@
     <title>Bienvenida</title>
     <style>
         body {
-            background-color: blue; /* Color de fondo azul */
-            color: white; /* Color del texto en blanco */
-            text-align: center; /* Centra el texto */
-            font-family: Arial, sans-serif; /* Tipo de fuente */
-            padding-top: 20%; /* Espaciado superior */
+            background-color: blue; /* Establece el color de fondo a azul */
+            color: white; /* Establece el color del texto a blanco */
+            text-align: center; /* Centra el texto en la página */
+            font-family: Arial, sans-serif; /* Define la fuente del texto */
+            padding-top: 20%; /* Espacio superior para centrar el contenido verticalmente */
         }
     </style>
 </head>
@@ -18,4 +18,3 @@
     <h1>¡Bienvenido a mi sitio web!</h1>
 </body>
 </html>
-
